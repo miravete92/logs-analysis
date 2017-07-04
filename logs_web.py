@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
-# 
+#
 # A buggy web service in need of a database.
 
 from flask import Flask, request, redirect, url_for
-
 from logsdb import get_most_popular, get_popular_authors, get_error_days
 
 app = Flask(__name__)
@@ -31,11 +30,11 @@ HTML_WRAP = '''\
     <ul>
 %s
     </ul>
-	<h2>Author Views</h2>
+    <h2>Author Views</h2>
     <ul>
 %s
     </ul>
-	<h2>Days with error&gt;1%%</h2>
+    <h2>Days with error&gt;1%%</h2>
     <ul>
 %s
     </ul>
@@ -59,17 +58,19 @@ ERROR = '''\
 
 @app.route('/', methods=['GET'])
 def main():
-  '''Main page of the log.'''
-  article_views = "".join(VIEW % (views, title) for title, views in get_most_popular())
-  
-  author_views = "".join(AUTOR_VIEW % (views, author) for author, views in get_popular_authors())
-  
-  log_errors = "".join(ERROR % (perc, day) for day, perc in get_error_days())
-  
-  html = HTML_WRAP % (article_views, author_views, log_errors)
-  return html
+    '''Main page of the log.'''
+    article_views = "".join(VIEW % (views, title) for title,
+                            views in get_most_popular())
+
+    author_views = "".join(AUTOR_VIEW % (views, author) for author,
+                           views in get_popular_authors())
+
+    log_errors = "".join(ERROR % (perc, day) for day,
+                         perc in get_error_days())
+
+    html = HTML_WRAP % (article_views, author_views, log_errors)
+    return html
 
 
 if __name__ == '__main__':
-  app.run(host='0.0.0.0', port=8000)
-
+    app.run(host='0.0.0.0', port=8000)
